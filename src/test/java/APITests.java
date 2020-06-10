@@ -1,3 +1,4 @@
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
@@ -28,5 +29,11 @@ public class APITests {
         return jsonObject;
     }
 
-
+    @Test
+    public void retrieveUsersWithCityLondon() throws JSONException {
+        JSONArray londonUsers = App.retrieveLondonUsers();
+        for (int i = 0; i < londonUsers.length(); i++) {
+            assertEquals("London", londonUsers.getJSONObject(i).get("city"));
+        }
+    }
 }

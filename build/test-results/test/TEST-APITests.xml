@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="APITests" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-06-10T13:29:53" hostname="AsadKs-MacBook-Pro.local" time="0.555">
+<testsuite name="APITests" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-06-10T13:56:15" hostname="AsadKs-MacBook-Pro.local" time="38.667">
   <properties/>
-  <testcase name="verifyUser1" classname="APITests" time="0.555"/>
+  <testcase name="retrieveUsersWithCityLondon" classname="APITests" time="38.667"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
