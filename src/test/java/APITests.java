@@ -6,6 +6,10 @@ import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import static junit.framework.TestCase.assertEquals;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.lessThan;
+import static org.junit.Assert.assertThat;
 
 public class APITests {
     @Test
@@ -43,7 +47,17 @@ public class APITests {
 
     @Test
     public void retrieveUsersWithin50MilesOfLondon() {
+        JSONArray usersWithinFiftyMiles = App.retrieveUsersWithinFiftyMilesOfLondon();
+        assert usersWithinFiftyMiles != null;
 
+        for (int i = 0; i < usersWithinFiftyMiles.length(); i++) {
+            try {
+                assertThat(usersWithinFiftyMiles.getJSONObject(i).getInt("latitude"), allOf(greaterThan(50), lessThan(52)));
+                assertThat(usersWithinFiftyMiles.getJSONObject(i).getInt("longitude"), allOf(greaterThan(-1), lessThan(2)));
+            } catch (JSONException exception) {
+                exception.printStackTrace();
+            }
+        }
     }
 
     //    @Test

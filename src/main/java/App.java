@@ -37,6 +37,10 @@ public class App {
         return null;
     }
 
+    public static JSONArray retrieveUsersWithinFiftyMilesOfLondon() {
+        return null;
+    }
+
     public static JSONArray retrieveLondonUsersWithForLoop() {
         JSONArray jsonArray = new JSONArray();
         for (int i = 1; i < 1001; i++) {
