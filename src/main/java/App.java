@@ -13,39 +13,57 @@ public class App {
     public static final String LONDON = "London";
 
     public static void main(String[] args) {
-        System.out.println(retrieveUserId(1));
-        System.out.println(retrieveUsersForTheCityOf(LONDON));
+        OkHttpClient client = new OkHttpClient();
+        Request.Builder builder = new Request.Builder();
+
+        System.out.println(retrieveUserId(1, client, builder));
+        System.out.println(retrieveUsersForTheCityOf(LONDON, client, builder));
+        System.out.println(retrieveUsersWithinFiftyMilesOfLondon(client, builder));
     }
 
-    public static JSONObject retrieveUserId(int id) {
+    public static JSONObject retrieveUserId(int id, OkHttpClient client, Request.Builder builder) {
         try {
-            return new JSONObject(BuildRequest(USER_FOR_ID, String.valueOf(id)));
+            return new JSONObject(BuildRequest(USER_FOR_ID, String.valueOf(id), client, builder));
         } catch (JSONException exception) {
             exception.printStackTrace();
         }
         return null;
     }
 
-    public static JSONArray retrieveUsersForTheCityOf(String city) {
+    public static JSONArray retrieveUsersForTheCityOf(String city, OkHttpClient client, Request.Builder builder) {
         String capitalisedCity = city.substring(0, 1).toUpperCase() + city.substring(1);
 
         try {
-            return new JSONArray(BuildRequest(USERS_FOR_CITY_OF, capitalisedCity));
+            return new JSONArray(BuildRequest(USERS_FOR_CITY_OF, capitalisedCity, client, builder));
         } catch (JSONException exception) {
             exception.printStackTrace();
         }
         return null;
     }
 
-    public static JSONArray retrieveUsersWithinFiftyMilesOfLondon() {
-        return null;
-    }
-
-    public static JSONArray retrieveLondonUsersWithForLoop() {
+    public static JSONArray retrieveUsersWithinFiftyMilesOfLondon(OkHttpClient client, Request.Builder builder) {
         JSONArray jsonArray = new JSONArray();
         for (int i = 1; i < 1001; i++) {
             try {
-                JSONObject jsonObject = new JSONObject(BuildRequest(USER_FOR_ID, String.valueOf(i)));
+                JSONObject jsonObject = new JSONObject(BuildRequest(USER_FOR_ID, String.valueOf(266), client, builder));
+                double latitude = Double.parseDouble(jsonObject.getString("latitude"));
+                double longitude = Double.parseDouble(jsonObject.getString("longitude"));
+                if ((latitude < 52 && latitude > 50) && (longitude < 2 && longitude > -1)) {
+                    jsonArray.put(jsonObject);
+                }
+            } catch (JSONException exception) {
+                exception.printStackTrace();
+            }
+        }
+
+        return jsonArray;
+    }
+
+    public static JSONArray retrieveLondonUsersWithForLoop(OkHttpClient client, Request.Builder builder) {
+        JSONArray jsonArray = new JSONArray();
+        for (int i = 1; i < 1001; i++) {
+            try {
+                JSONObject jsonObject = new JSONObject(BuildRequest(USER_FOR_ID, String.valueOf(i), client, builder));
                 if ("london".equalsIgnoreCase(jsonObject.getString("city"))) {
                     jsonArray.put(jsonObject);
                 }
@@ -57,15 +75,12 @@ public class App {
         return jsonArray;
     }
 
-    private static String BuildRequest(String url, String argument) {
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(String.format(url, argument))
+    private static String BuildRequest(String url, String argument, OkHttpClient okHttpClient, Request.Builder builder) {
+        Request request = builder.url(String.format(url, argument))
                 .get()
                 .build();
 
-        try (Response response = client.newCall(request).execute()) {
-            System.out.println("Is response successful: " + response.isSuccessful());
+        try (Response response = okHttpClient.newCall(request).execute()) {
             return response.body().string();
         } catch (IOException exception) {
             exception.printStackTrace();

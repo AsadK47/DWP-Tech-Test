@@ -1,3 +1,5 @@
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,10 +14,13 @@ import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertThat;
 
 public class APITests {
+    OkHttpClient client = new OkHttpClient();
+    Request.Builder builder = new Request.Builder();
+
     @Test
     public void verifyUser1() throws JSONException {
         JSONObject constructedUserAsObject = constructUser1();
-        JSONObject retrievedUserAsObject = App.retrieveUserId(1);
+        JSONObject retrievedUserAsObject = App.retrieveUserId(1, client, builder);
         assert retrievedUserAsObject != null;
 
         Assert.assertEquals(1, retrievedUserAsObject.get("id"));
@@ -38,7 +43,7 @@ public class APITests {
 
     @Test
     public void retrieveUsersForTheCityOfLondon() {
-        JSONArray londonUsers = App.retrieveUsersForTheCityOf(App.LONDON);
+        JSONArray londonUsers = App.retrieveUsersForTheCityOf(App.LONDON, client, builder);
         int expectedNumberOfUsers = 6;
 
         assert londonUsers != null;
@@ -47,7 +52,7 @@ public class APITests {
 
     @Test
     public void retrieveUsersWithin50MilesOfLondon() {
-        JSONArray usersWithinFiftyMiles = App.retrieveUsersWithinFiftyMilesOfLondon();
+        JSONArray usersWithinFiftyMiles = App.retrieveUsersWithinFiftyMilesOfLondon(client, builder);
         assert usersWithinFiftyMiles != null;
 
         for (int i = 0; i < usersWithinFiftyMiles.length(); i++) {
