@@ -11,6 +11,12 @@ public class App {
     private static final String USER_FOR_ID = "https://bpdts-test-app.herokuapp.com/user/%s";
     private static final String USERS_FOR_CITY_OF = "https://bpdts-test-app.herokuapp.com/city/%s/users";
     public static final String LONDON = "London";
+    private static final int NUMBER_OF_USERS_PLUS_ONE = 1001;
+    private static final int MAX_LONDON_LATITUDE = 52;
+    private static final int MIN_LONDON_LATITUDE = 50;
+    private static final int MAX_LONDON_LONGITUDE = 2;
+    private static final int MIN_LONDON_LONGITUDE = -1;
+
 
     public static void main(String[] args) {
         OkHttpClient client = new OkHttpClient();
@@ -43,12 +49,13 @@ public class App {
 
     public static JSONArray retrieveUsersWithinFiftyMilesOfLondon(OkHttpClient client, Request.Builder builder) {
         JSONArray jsonArray = new JSONArray();
-        for (int i = 1; i < 1001; i++) {
+        for (int user = 1; user < NUMBER_OF_USERS_PLUS_ONE; user++) {
             try {
-                JSONObject jsonObject = new JSONObject(BuildRequest(USER_FOR_ID, String.valueOf(266), client, builder));
+                JSONObject jsonObject = new JSONObject(BuildRequest(USER_FOR_ID, String.valueOf(user), client, builder));
                 double latitude = Double.parseDouble(jsonObject.getString("latitude"));
                 double longitude = Double.parseDouble(jsonObject.getString("longitude"));
-                if ((latitude < 52 && latitude > 50) && (longitude < 2 && longitude > -1)) {
+                if ((latitude < MAX_LONDON_LATITUDE && latitude > MIN_LONDON_LATITUDE)
+                        && (longitude < MAX_LONDON_LONGITUDE && longitude > -MIN_LONDON_LONGITUDE)) {
                     jsonArray.put(jsonObject);
                 }
             } catch (JSONException exception) {
@@ -64,7 +71,7 @@ public class App {
         for (int i = 1; i < 1001; i++) {
             try {
                 JSONObject jsonObject = new JSONObject(BuildRequest(USER_FOR_ID, String.valueOf(i), client, builder));
-                if ("london".equalsIgnoreCase(jsonObject.getString("city"))) {
+                if (LONDON.equalsIgnoreCase(jsonObject.getString("city"))) {
                     jsonArray.put(jsonObject);
                 }
             } catch (JSONException exception) {
