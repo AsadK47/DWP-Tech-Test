@@ -9,63 +9,57 @@ import java.io.IOException;
 
 public class App {
     public static void main(String[] args) {
-        System.out.println(retrieveUserId(1));
+        System.out.println(retrieveUserId("1"));
         System.out.println(retrieveUsersForTheCityOf("london"));
     }
 
-    public static JSONObject retrieveUserId(int id) {
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(String.format("https://bpdts-test-app.herokuapp.com/user/%s", id))
-                .get()
-                .build();
-
-        try (Response response = client.newCall(request).execute()) {
-            return new JSONObject(response.body().string());
-        } catch (JSONException | IOException exception) {
-            System.out.println(exception);
+    public static JSONObject retrieveUserId(String id) {
+        try {
+            return new JSONObject(BuildRequest("https://bpdts-test-app.herokuapp.com/user/%s", id));
+        } catch (JSONException exception) {
+            exception.printStackTrace();
         }
         return null;
     }
 
     public static JSONArray retrieveUsersForTheCityOf(String city) {
-        OkHttpClient client = new OkHttpClient();
         String capitalisedCity = city.substring(0, 1).toUpperCase() + city.substring(1);
-
-        Request request = new Request.Builder()
-                .url(String.format("https://bpdts-test-app.herokuapp.com/city/%s/users", capitalisedCity))
-                .get()
-                .build();
-
-        try (Response response = client.newCall(request).execute()) {
-            return new JSONArray(response.body().string());
-        } catch (JSONException | IOException exception) {
-            System.out.println(exception);
+        try {
+            return new JSONArray(BuildRequest("https://bpdts-test-app.herokuapp.com/city/%s/users", capitalisedCity));
+        } catch (JSONException exception) {
+            exception.printStackTrace();
         }
         return null;
     }
 
-    public static JSONArray retrieveLondonUsersWithLoop() {
-        OkHttpClient client = new OkHttpClient();
+    public static JSONArray retrieveLondonUsersWithForLoop() {
         JSONArray jsonArray = new JSONArray();
-
-        Request.Builder builder = new Request.Builder();
         for (int i = 1; i < 1001; i++) {
-            Request request =
-                    builder.url(String.format("https://bpdts-test-app.herokuapp.com/user/%s", i))
-                            .get()
-                            .build();
-
-            try (Response response = client.newCall(request).execute()) {
-                JSONObject jsonObject = new JSONObject(response.body().string());
+            try {
+                JSONObject jsonObject = new JSONObject(BuildRequest("https://bpdts-test-app.herokuapp.com/user/%s", String.valueOf(i)));
                 if ("london".equalsIgnoreCase(jsonObject.getString("city"))) {
                     jsonArray.put(jsonObject);
                 }
-            } catch (JSONException | IOException exception) {
-                System.out.println(exception);
+            } catch (JSONException exception) {
+                exception.printStackTrace();
             }
         }
 
         return jsonArray;
+    }
+
+    private static String BuildRequest(String url, String argument) {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(String.format(url, argument))
+                .get()
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return response.body().string();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+        return null;
     }
 }
