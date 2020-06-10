@@ -13,7 +13,7 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertThat;
 
-public class APITests {
+public class APITests extends VariableConfig{
     OkHttpClient client = new OkHttpClient();
     Request.Builder builder = new Request.Builder();
 
@@ -43,7 +43,7 @@ public class APITests {
 
     @Test
     public void retrieveUsersForTheCityOfLondon() {
-        JSONArray londonUsers = App.retrieveUsersForTheCityOf(App.LONDON, client, builder);
+        JSONArray londonUsers = App.retrieveUsersForTheCityOf(getLONDON(), client, builder);
         int expectedNumberOfUsers = 6;
 
         assert londonUsers != null;
@@ -57,8 +57,10 @@ public class APITests {
 
         for (int i = 0; i < usersWithinFiftyMiles.length(); i++) {
             try {
-                assertThat(usersWithinFiftyMiles.getJSONObject(i).getInt("latitude"), allOf(greaterThan(50), lessThan(52)));
-                assertThat(usersWithinFiftyMiles.getJSONObject(i).getInt("longitude"), allOf(greaterThan(-1), lessThan(2)));
+                assertThat(usersWithinFiftyMiles.getJSONObject(i).getInt("latitude"),
+                        allOf(greaterThan(getMinLondonLatitude()), lessThan(getMaxLondonLatitude())));
+                assertThat(usersWithinFiftyMiles.getJSONObject(i).getInt("longitude"),
+                        allOf(greaterThan(getMinLondonLongitude()), lessThan(getMaxLondonLongitude())));
             } catch (JSONException exception) {
                 exception.printStackTrace();
             }

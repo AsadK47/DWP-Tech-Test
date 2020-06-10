@@ -7,29 +7,20 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-public class App {
-    private static final String USER_FOR_ID = "https://bpdts-test-app.herokuapp.com/user/%s";
-    private static final String USERS_FOR_CITY_OF = "https://bpdts-test-app.herokuapp.com/city/%s/users";
-    public static final String LONDON = "London";
-    private static final int NUMBER_OF_USERS_PLUS_ONE = 1001;
-    private static final int MAX_LONDON_LATITUDE = 52;
-    private static final int MIN_LONDON_LATITUDE = 50;
-    private static final int MAX_LONDON_LONGITUDE = 2;
-    private static final int MIN_LONDON_LONGITUDE = -1;
 
-
+public class App extends VariableConfig {
     public static void main(String[] args) {
         OkHttpClient client = new OkHttpClient();
         Request.Builder builder = new Request.Builder();
 
         System.out.println(retrieveUserId(1, client, builder));
-        System.out.println(retrieveUsersForTheCityOf(LONDON, client, builder));
+        System.out.println(retrieveUsersForTheCityOf(getLONDON(), client, builder));
         System.out.println(retrieveUsersWithinFiftyMilesOfLondon(client, builder));
     }
 
     public static JSONObject retrieveUserId(int id, OkHttpClient client, Request.Builder builder) {
         try {
-            return new JSONObject(BuildRequest(USER_FOR_ID, String.valueOf(id), client, builder));
+            return new JSONObject(BuildRequest(getUrlUserForId(), String.valueOf(id), client, builder));
         } catch (JSONException exception) {
             exception.printStackTrace();
         }
@@ -40,7 +31,7 @@ public class App {
         String capitalisedCity = city.substring(0, 1).toUpperCase() + city.substring(1);
 
         try {
-            return new JSONArray(BuildRequest(USERS_FOR_CITY_OF, capitalisedCity, client, builder));
+            return new JSONArray(BuildRequest(getUrlUsersForCityOf(), capitalisedCity, client, builder));
         } catch (JSONException exception) {
             exception.printStackTrace();
         }
@@ -49,13 +40,13 @@ public class App {
 
     public static JSONArray retrieveUsersWithinFiftyMilesOfLondon(OkHttpClient client, Request.Builder builder) {
         JSONArray jsonArray = new JSONArray();
-        for (int user = 1; user < NUMBER_OF_USERS_PLUS_ONE; user++) {
+        for (int user = 1; user < getNumberOfUsersPlusOne(); user++) {
             try {
-                JSONObject jsonObject = new JSONObject(BuildRequest(USER_FOR_ID, String.valueOf(user), client, builder));
+                JSONObject jsonObject = new JSONObject(BuildRequest(getUrlUserForId(), String.valueOf(user), client, builder));
                 double latitude = Double.parseDouble(jsonObject.getString("latitude"));
                 double longitude = Double.parseDouble(jsonObject.getString("longitude"));
-                if ((latitude < MAX_LONDON_LATITUDE && latitude > MIN_LONDON_LATITUDE)
-                        && (longitude < MAX_LONDON_LONGITUDE && longitude > -MIN_LONDON_LONGITUDE)) {
+                if ((latitude < getMaxLondonLatitude() && latitude > getMinLondonLatitude())
+                        && (longitude < getMaxLondonLongitude() && longitude > getMinLondonLongitude())) {
                     jsonArray.put(jsonObject);
                 }
             } catch (JSONException exception) {
@@ -70,8 +61,8 @@ public class App {
         JSONArray jsonArray = new JSONArray();
         for (int i = 1; i < 1001; i++) {
             try {
-                JSONObject jsonObject = new JSONObject(BuildRequest(USER_FOR_ID, String.valueOf(i), client, builder));
-                if (LONDON.equalsIgnoreCase(jsonObject.getString("city"))) {
+                JSONObject jsonObject = new JSONObject(BuildRequest(getUrlUserForId(), String.valueOf(i), client, builder));
+                if (getLONDON().equalsIgnoreCase(jsonObject.getString("city"))) {
                     jsonArray.put(jsonObject);
                 }
             } catch (JSONException exception) {
