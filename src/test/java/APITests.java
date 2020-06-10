@@ -35,8 +35,15 @@ public class APITests {
     @Test
     public void retrieveUsersForTheCityOfLondon() {
         JSONArray londonUsers = App.retrieveUsersForTheCityOf(App.LONDON);
+        int expectedNumberOfUsers = 6;
+
         assert londonUsers != null;
-        assertEquals(6, londonUsers.length());
+        assertEquals(expectedNumberOfUsers, londonUsers.length());
+    }
+
+    @Test
+    public void retrieveUsersWithin50MilesOfLondon() {
+
     }
 
     //    @Test

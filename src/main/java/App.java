@@ -61,6 +61,7 @@ public class App {
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
+            System.out.println("Is response successful: " + response.isSuccessful());
             return response.body().string();
         } catch (IOException exception) {
             exception.printStackTrace();
