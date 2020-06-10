@@ -10,7 +10,7 @@ import java.io.IOException;
 public class App {
     public static void main(String[] args) {
         System.out.println(retrieveUserId(1));
-        System.out.println(retrieveLondonUsers());
+        System.out.println(retrieveUsersForTheCityOf("london"));
     }
 
     public static JSONObject retrieveUserId(int id) {
@@ -28,7 +28,24 @@ public class App {
         return null;
     }
 
-    public static JSONArray retrieveLondonUsers() {
+    public static JSONArray retrieveUsersForTheCityOf(String city) {
+        OkHttpClient client = new OkHttpClient();
+        String capitalisedCity = city.substring(0, 1).toUpperCase() + city.substring(1);
+
+        Request request = new Request.Builder()
+                .url(String.format("https://bpdts-test-app.herokuapp.com/city/%s/users", capitalisedCity))
+                .get()
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return new JSONArray(response.body().string());
+        } catch (JSONException | IOException exception) {
+            System.out.println(exception);
+        }
+        return null;
+    }
+
+    public static JSONArray retrieveLondonUsersWithLoop() {
         OkHttpClient client = new OkHttpClient();
         JSONArray jsonArray = new JSONArray();
 

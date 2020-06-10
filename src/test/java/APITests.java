@@ -14,7 +14,7 @@ public class APITests {
         JSONObject retrievedUserAsObject = App.retrieveUserId(1);
         assert retrievedUserAsObject != null;
 
-        Assert.assertEquals(2, retrievedUserAsObject.get("id"));
+        Assert.assertEquals(1, retrievedUserAsObject.get("id"));
         JSONAssert.assertEquals(constructedUserAsObject, retrievedUserAsObject, true);
     }
 
@@ -33,8 +33,15 @@ public class APITests {
     }
 
     @Test
-    public void retrieveUsersWithCityLondon() throws JSONException {
-        JSONArray londonUsers = App.retrieveLondonUsers();
+    public void retrieveUsersForTheCityOfLondon() {
+        JSONArray londonUsers = App.retrieveUsersForTheCityOf("London");
+        assert londonUsers != null;
+        assertEquals(6, londonUsers.length());
+    }
+
+    @Test
+    public void retrieveLondonUsersWithLoop() throws JSONException {
+        JSONArray londonUsers = App.retrieveLondonUsersWithLoop();
         for (int i = 0; i < londonUsers.length(); i++) {
             assertEquals("London", londonUsers.getJSONObject(i).get("city"));
         }
