@@ -1,18 +1,21 @@
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.Assert;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
-
-import java.util.Objects;
 
 import static junit.framework.TestCase.assertEquals;
 
 public class APITests {
     @Test
     public void verifyUser1() throws JSONException {
-        JSONObject user1 = constructUser1();
-        JSONAssert.assertEquals(user1, App.retrieveUserId(1), true);
+        JSONObject constructedUserAsObject = constructUser1();
+        JSONObject retrievedUserAsObject = App.retrieveUserId(1);
+        assert retrievedUserAsObject != null;
+
+        Assert.assertEquals(2, retrievedUserAsObject.get("id"));
+        JSONAssert.assertEquals(constructedUserAsObject, retrievedUserAsObject, true);
     }
 
     private JSONObject constructUser1() throws JSONException {

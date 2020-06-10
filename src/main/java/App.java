@@ -10,7 +10,7 @@ import java.io.IOException;
 public class App {
     public static void main(String[] args) {
         System.out.println(retrieveUserId(1));
-        retrieveLondonUsers();
+        System.out.println(retrieveLondonUsers());
     }
 
     public static JSONObject retrieveUserId(int id) {
