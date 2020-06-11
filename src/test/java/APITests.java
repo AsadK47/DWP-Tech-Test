@@ -53,7 +53,6 @@ public class APITests extends VariableConfig{
     @Test
     public void retrieveUsersWithin50MilesOfLondon() {
         JSONArray usersWithinFiftyMiles = App.retrieveUsersWithinFiftyMilesOfLondon(client, builder);
-        assert usersWithinFiftyMiles != null;
 
         for (int i = 0; i < usersWithinFiftyMiles.length(); i++) {
             try {

@@ -7,7 +7,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-
 public class App extends VariableConfig {
     public static void main(String[] args) {
         OkHttpClient client = new OkHttpClient();
@@ -15,7 +14,7 @@ public class App extends VariableConfig {
 
         System.out.println(retrieveUserId(1, client, builder));
         System.out.println(retrieveUsersForTheCityOf(getLONDON(), client, builder));
-        System.out.println(retrieveUsersWithinFiftyMilesOfLondon(client, builder));
+        System.out.println(getFiftyMileMessage() + retrieveUsersWithinFiftyMilesOfLondon(client, builder));
     }
 
     public static JSONObject retrieveUserId(int id, OkHttpClient client, Request.Builder builder) {
@@ -40,14 +39,14 @@ public class App extends VariableConfig {
 
     public static JSONArray retrieveUsersWithinFiftyMilesOfLondon(OkHttpClient client, Request.Builder builder) {
         JSONArray jsonArray = new JSONArray();
-        for (int user = 1; user < getNumberOfUsersPlusOne(); user++) {
+        for (int userId = 1; userId < getNumberOfUsersPlusOne(); userId++) {
             try {
-                JSONObject jsonObject = new JSONObject(BuildRequest(getUrlUserForId(), String.valueOf(user), client, builder));
-                double latitude = Double.parseDouble(jsonObject.getString("latitude"));
-                double longitude = Double.parseDouble(jsonObject.getString("longitude"));
+                JSONObject user = new JSONObject(BuildRequest(getUrlUserForId(), String.valueOf(userId), client, builder));
+                double latitude = returnAsDecimal(user.getString(getLATITUDE()));
+                double longitude = returnAsDecimal(user.getString(getLONGITUDE()));
                 if ((latitude < getMaxLondonLatitude() && latitude > getMinLondonLatitude())
                         && (longitude < getMaxLondonLongitude() && longitude > getMinLondonLongitude())) {
-                    jsonArray.put(jsonObject);
+                    jsonArray.put(user);
                 }
             } catch (JSONException exception) {
                 exception.printStackTrace();
@@ -84,5 +83,9 @@ public class App extends VariableConfig {
             exception.printStackTrace();
         }
         return null;
+    }
+
+    private static Double returnAsDecimal(String string) {
+        return Double.parseDouble(string);
     }
 }
