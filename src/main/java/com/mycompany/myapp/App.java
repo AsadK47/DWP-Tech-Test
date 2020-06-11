@@ -1,3 +1,5 @@
+package com.mycompany.myapp;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -6,20 +8,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import static com.mycompany.variableconfig.VariableConfig.*;
 
-public class App extends VariableConfig {
+public class App {
     public static void main(String[] args) {
         OkHttpClient client = new OkHttpClient();
         Request.Builder builder = new Request.Builder();
 
-        System.out.println(retrieveUserId(1, client, builder));
-        System.out.println(retrieveUsersForTheCityOf(getLONDON(), client, builder));
-        System.out.println(getFiftyMileMessage() + retrieveUsersWithinFiftyMilesOfLondon(client, builder));
+        System.out.println(USER_WITH_ID_MESSAGE + retrieveUserWithId(USER_ID, client, builder));
+        System.out.println(USERS_FOR_CITY_MESSAGE + retrieveUsersForTheCityOf((LONDON), client, builder));
+        System.out.println(FIFTY_MILE_MESSAGE + retrieveUsersWithinFiftyMilesOfLondon(client, builder));
     }
 
-    public static JSONObject retrieveUserId(int id, OkHttpClient client, Request.Builder builder) {
+    public static JSONObject retrieveUserWithId(int id, OkHttpClient client, Request.Builder builder) {
         try {
-            return new JSONObject(BuildRequest(getUrlUserForId(), String.valueOf(id), client, builder));
+            return new JSONObject(BuildRequest(URL_USER_FOR_ID, String.valueOf(id), client, builder));
         } catch (JSONException exception) {
             exception.printStackTrace();
         }
@@ -30,7 +33,7 @@ public class App extends VariableConfig {
         String capitalisedCity = city.substring(0, 1).toUpperCase() + city.substring(1);
 
         try {
-            return new JSONArray(BuildRequest(getUrlUsersForCityOf(), capitalisedCity, client, builder));
+            return new JSONArray(BuildRequest(URL_USERS_FOR_CITY_OF, capitalisedCity, client, builder));
         } catch (JSONException exception) {
             exception.printStackTrace();
         }
@@ -39,13 +42,13 @@ public class App extends VariableConfig {
 
     public static JSONArray retrieveUsersWithinFiftyMilesOfLondon(OkHttpClient client, Request.Builder builder) {
         JSONArray jsonArray = new JSONArray();
-        for (int userId = 1; userId < getNumberOfUsersPlusOne(); userId++) {
+        for (int userId = 1; userId < NUMBER_OF_USERS_PLUS_ONE; userId++) {
             try {
-                JSONObject user = new JSONObject(BuildRequest(getUrlUserForId(), String.valueOf(userId), client, builder));
-                double latitude = returnAsDecimal(user.getString(getLATITUDE()));
-                double longitude = returnAsDecimal(user.getString(getLONGITUDE()));
-                if ((latitude < getMaxLondonLatitude() && latitude > getMinLondonLatitude())
-                        && (longitude < getMaxLondonLongitude() && longitude > getMinLondonLongitude())) {
+                JSONObject user = new JSONObject(BuildRequest(URL_USER_FOR_ID, String.valueOf(userId), client, builder));
+                double latitude = returnAsDecimal(user.getString(LATITUDE));
+                double longitude = returnAsDecimal(user.getString(LONGITUDE));
+                if ((latitude < MAX_LONDON_LATITUDE && latitude > MIN_LONDON_LATITUDE)
+                        && (longitude < MAX_LONDON_LONGITUDE && longitude > MIN_LONDON_LONGITUDE)) {
                     jsonArray.put(user);
                 }
             } catch (JSONException exception) {
@@ -60,8 +63,8 @@ public class App extends VariableConfig {
         JSONArray jsonArray = new JSONArray();
         for (int i = 1; i < 1001; i++) {
             try {
-                JSONObject jsonObject = new JSONObject(BuildRequest(getUrlUserForId(), String.valueOf(i), client, builder));
-                if (getLONDON().equalsIgnoreCase(jsonObject.getString("city"))) {
+                JSONObject jsonObject = new JSONObject(BuildRequest(URL_USER_FOR_ID, String.valueOf(i), client, builder));
+                if (LONDON.equalsIgnoreCase(jsonObject.getString(CITY))) {
                     jsonArray.put(jsonObject);
                 }
             } catch (JSONException exception) {

@@ -1,3 +1,6 @@
+package com.mycompany.mytests;
+
+import com.mycompany.myapp.App;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.json.JSONArray;
@@ -13,17 +16,19 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertThat;
 
-public class APITests extends VariableConfig{
+import static com.mycompany.variableconfig.VariableConfig.*;
+
+public class APITests {
     OkHttpClient client = new OkHttpClient();
     Request.Builder builder = new Request.Builder();
 
     @Test
     public void verifyUser1() throws JSONException {
         JSONObject constructedUserAsObject = constructUser1();
-        JSONObject retrievedUserAsObject = App.retrieveUserId(1, client, builder);
+        JSONObject retrievedUserAsObject = App.retrieveUserWithId(1, client, builder);
         assert retrievedUserAsObject != null;
 
-        Assert.assertEquals(1, retrievedUserAsObject.get("id"));
+        Assert.assertEquals(1, retrievedUserAsObject.get(ID));
         JSONAssert.assertEquals(constructedUserAsObject, retrievedUserAsObject, true);
     }
 
@@ -43,7 +48,7 @@ public class APITests extends VariableConfig{
 
     @Test
     public void retrieveUsersForTheCityOfLondon() {
-        JSONArray londonUsers = App.retrieveUsersForTheCityOf(getLONDON(), client, builder);
+        JSONArray londonUsers = App.retrieveUsersForTheCityOf(LONDON, client, builder);
         int expectedNumberOfUsers = 6;
 
         assert londonUsers != null;
@@ -56,10 +61,12 @@ public class APITests extends VariableConfig{
 
         for (int i = 0; i < usersWithinFiftyMiles.length(); i++) {
             try {
-                assertThat(usersWithinFiftyMiles.getJSONObject(i).getInt("latitude"),
-                        allOf(greaterThan(getMinLondonLatitude()), lessThan(getMaxLondonLatitude())));
-                assertThat(usersWithinFiftyMiles.getJSONObject(i).getInt("longitude"),
-                        allOf(greaterThan(getMinLondonLongitude()), lessThan(getMaxLondonLongitude())));
+                assertThat(usersWithinFiftyMiles.getJSONObject(i).getInt(LATITUDE),
+                        allOf(greaterThan(MIN_LONDON_LATITUDE), lessThan(MAX_LONDON_LATITUDE)));
+
+                assertThat(usersWithinFiftyMiles.getJSONObject(i).getInt(LONGITUDE),
+                        allOf(greaterThan(MIN_LONDON_LONGITUDE), lessThan(MAX_LONDON_LONGITUDE)));
+
             } catch (JSONException exception) {
                 exception.printStackTrace();
             }
@@ -68,7 +75,7 @@ public class APITests extends VariableConfig{
 
     //    @Test
     //    public void retrieveLondonUsersWithLoop() throws JSONException {
-    //        JSONArray londonUsers = App.retrieveLondonUsersWithForLoop();
+    //        JSONArray londonUsers = MyApp.App.retrieveLondonUsersWithForLoop();
     //        for (int i = 0; i < londonUsers.length(); i++) {
     //            assertEquals("London", londonUsers.getJSONObject(i).get("city"));
     //        }
