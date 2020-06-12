@@ -42,37 +42,34 @@ public class App {
 
     public static JSONArray retrieveUsersWithinFiftyMilesOfLondon(OkHttpClient client, Request.Builder builder) {
         JSONArray jsonArray = new JSONArray();
-        for (int userId = 1; userId < NUMBER_OF_USERS_PLUS_ONE; userId++) {
-            try {
-                JSONObject user = new JSONObject(BuildRequest(URL_USER_FOR_ID, String.valueOf(userId), client, builder));
-                double latitude = returnAsDecimal(user.getString(LATITUDE));
-                double longitude = returnAsDecimal(user.getString(LONGITUDE));
-                if ((latitude < MAX_LONDON_LATITUDE && latitude > MIN_LONDON_LATITUDE)
-                        && (longitude < MAX_LONDON_LONGITUDE && longitude > MIN_LONDON_LONGITUDE)) {
-                    jsonArray.put(user);
-                }
-            } catch (JSONException exception) {
-                exception.printStackTrace();
+        try {
+            JSONArray allUsers = new JSONArray(BuildRequest(URL_FOR_ALL_USERS, client, builder));
+            for (int userId = 1; userId < allUsers.length(); userId++) {
+                double userLat = allUsers.getJSONObject(userId).getDouble(LATITUDE);
+                double userLong = allUsers.getJSONObject(userId).getDouble(LONGITUDE);
+                if ((userLat < MAX_LONDON_LATITUDE && userLat > MIN_LONDON_LATITUDE)
+                        && (userLong < MAX_LONDON_LONGITUDE && userLong > MIN_LONDON_LONGITUDE)) {
+                    jsonArray.put(allUsers.getJSONObject(userId));
+               }
             }
+        } catch (JSONException exception) {
+            exception.printStackTrace();
         }
 
         return jsonArray;
     }
 
-    public static JSONArray retrieveLondonUsersWithForLoop(OkHttpClient client, Request.Builder builder) {
-        JSONArray jsonArray = new JSONArray();
-        for (int i = 1; i < 1001; i++) {
-            try {
-                JSONObject jsonObject = new JSONObject(BuildRequest(URL_USER_FOR_ID, String.valueOf(i), client, builder));
-                if (LONDON.equalsIgnoreCase(jsonObject.getString(CITY))) {
-                    jsonArray.put(jsonObject);
-                }
-            } catch (JSONException exception) {
-                exception.printStackTrace();
-            }
-        }
+    private static String BuildRequest(String url, OkHttpClient okHttpClient, Request.Builder builder) {
+        Request request = builder.url(url)
+                .get()
+                .build();
 
-        return jsonArray;
+        try (Response response = okHttpClient.newCall(request).execute()) {
+            return response.body().string();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+        return null;
     }
 
     private static String BuildRequest(String url, String argument, OkHttpClient okHttpClient, Request.Builder builder) {

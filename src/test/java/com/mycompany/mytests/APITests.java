@@ -72,12 +72,4 @@ public class APITests {
             }
         }
     }
-
-    //    @Test
-    //    public void retrieveLondonUsersWithLoop() throws JSONException {
-    //        JSONArray londonUsers = MyApp.App.retrieveLondonUsersWithForLoop();
-    //        for (int i = 0; i < londonUsers.length(); i++) {
-    //            assertEquals("London", londonUsers.getJSONObject(i).get("city"));
-    //        }
-    //    }
 }
