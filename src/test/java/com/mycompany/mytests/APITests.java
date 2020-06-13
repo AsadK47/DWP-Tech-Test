@@ -25,7 +25,7 @@ public class APITests {
     Request.Builder builder = new Request.Builder();
 
     @Test
-    public void endpointTestFor() {
+    public void endpointTestForUrls() {
         String urlForLondonCity = String.format(URL_USERS_FOR_CITY_OF, LONDON);
         String urlForUserId1 = String.format(URL_USER_FOR_ID, 1);
 
