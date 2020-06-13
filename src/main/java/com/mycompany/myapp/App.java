@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import static com.mycompany.variableconfig.VariableConfig.*;
 
@@ -44,10 +45,11 @@ public class App {
     public static JSONArray retrieveUsersWithinFiftyMilesOfLondon(OkHttpClient client, Request.Builder builder) {
         JSONArray jsonArray = new JSONArray();
         try {
-            JSONArray allUsers = new JSONArray(BuildRequest(client, builder));
-            for (int userId = 1; userId < allUsers.length(); userId++) {
+            JSONArray allUsers = retrieveAllUsers(client, builder);
+            for (int userId = 1; userId < Objects.requireNonNull(allUsers).length(); userId++) {
                 double userLat = allUsers.getJSONObject(userId).getDouble(LATITUDE);
                 double userLong = allUsers.getJSONObject(userId).getDouble(LONGITUDE);
+
                 if ((userLat < MAX_LONDON_LATITUDE && userLat > MIN_LONDON_LATITUDE)
                         && (userLong < MAX_LONDON_LONGITUDE && userLong > MIN_LONDON_LONGITUDE)) {
                     jsonArray.put(allUsers.getJSONObject(userId));
@@ -60,14 +62,10 @@ public class App {
         return jsonArray;
     }
 
-    private static String BuildRequest(OkHttpClient okHttpClient, Request.Builder builder) {
-        Request request = builder.url(URL_FOR_ALL_USERS)
-                .get()
-                .build();
-
-        try (Response response = okHttpClient.newCall(request).execute()) {
-            return response.body().string();
-        } catch (IOException exception) {
+    public static JSONArray retrieveAllUsers(OkHttpClient client, Request.Builder builder) {
+        try {
+            return new JSONArray(BuildRequest(URL_FOR_ALL_USERS, null, client, builder));
+        } catch (JSONException exception) {
             exception.printStackTrace();
         }
         return null;

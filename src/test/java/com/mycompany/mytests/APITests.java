@@ -9,16 +9,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.skyscreamer.jsonassert.JSONAssert;
 
+import static com.mycompany.variableconfig.VariableConfig.*;
 import static io.restassured.RestAssured.given;
 import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertThat;
-
-import static com.mycompany.variableconfig.VariableConfig.*;
 
 public class APITests {
     OkHttpClient client = new OkHttpClient();
@@ -91,5 +90,10 @@ public class APITests {
                 exception.printStackTrace();
             }
         }
+    }
+
+    @Test
+    public void retrieveAllUsers() {
+        JSONArray allUsers = App.retrieveAllUsers(client, builder);
     }
 }

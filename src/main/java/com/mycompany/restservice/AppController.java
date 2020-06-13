@@ -13,21 +13,26 @@ import java.util.Objects;
 @RestController
 @EnableAutoConfiguration
 public class AppController {
-    OkHttpClient okHttpClient = new OkHttpClient();
+    OkHttpClient client = new OkHttpClient();
     Request.Builder builder = new Request.Builder();
+
+    @GetMapping("/")
+    public String allUsers() {
+        return Objects.requireNonNull(App.retrieveAllUsers(client, builder)).toString();
+    }
 
     @GetMapping("/userid/{id}")
     public String retrieveWithUserId(@PathVariable int id) {
-        return Objects.requireNonNull(App.retrieveUserWithId(id, okHttpClient, builder)).toString();
+        return Objects.requireNonNull(App.retrieveUserWithId(id, client, builder)).toString();
     }
 
     @GetMapping("/city/{city}")
     public String retrieveUsersForTheCityOf(@PathVariable String city) {
-        return Objects.requireNonNull(App.retrieveUsersForTheCityOf(city, okHttpClient, builder)).toString();
+        return Objects.requireNonNull(App.retrieveUsersForTheCityOf(city, client, builder)).toString();
     }
 
     @GetMapping("/userswithinfiftymilesoflondon")
     public String retrieveUsersWithinFiftyMilesOfLondon() {
-        return App.retrieveUsersWithinFiftyMilesOfLondon(okHttpClient, builder).toString();
+        return App.retrieveUsersWithinFiftyMilesOfLondon(client, builder).toString();
     }
 }
