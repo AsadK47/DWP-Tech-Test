@@ -19,7 +19,7 @@ There are 2 ways to be able to run this api:
 1. From the terminal run ./gradlew bootRun  
 2. Run the file RestServiceApplication from an IDE such as Intellij
 
-At this point SpringBoot should start up which will take a couple of seconds so please be patient
+At this point SpringBoot should start up which will take a couple of seconds so please be patient.
 
 ## How to use the api
 Once the service is running you can now visit 3 different URL's all prepended with 
@@ -54,12 +54,12 @@ because I believe being able to search any user via their id is very useful.
 #### Did you follow a TDD approach?
 If you look at my commit history you will see that I tried to follow a TDD approach which was quite successful.
 However, eventually I started to run into unknown territory and had to write the functionality first and tests right after
-to cover the scenario
+to cover the scenario.
 
 #### Is your code clean and maintainable?
 I believe it is, however some more improvements could be made with further refactoring and refining. It is at the very least
 quite maintainable in my opinion as I was easily able to add new routes and more functionality and an example of this being
-adding an all users route
+adding an all user routes.
 
 #### How could you improve this in the future?
 I would consider changing the code to retrieve all london users within 50 miles as I believe this can be made more
@@ -69,3 +69,8 @@ the basis for the algorithm used to calculate that.
 
 Latitudes can help you get the vertical axis correct and so has a limited range, but the 
 longitude can vary much more heavily and so finding a rough estimate for London was necessary to start with. 
+
+#### Running the App itself without SpringBoot
+There is a main method that will print out the first user and the rest of the contents in the instrucitons for this test.
+This is easily removable, however I left it in there if a console version wanted to be printed without having to 
+start SpringBoot and check via the api.
