@@ -11,7 +11,7 @@ living in London, or whose current coordinates are within 50 miles (ca. 80 km) o
 
 ## Opening project in an IDE
 If you are opening the project in an IDE such as intellij, please do so by opening the build.gradle file
-which will enable intellij to open the project correctly with all dependencies downloaded and such.
+which will enable intellij to open the files as a project and enable the correct structure, download dependencies, etc.
 
 ## How to run the unit tests
 ### For all of the following operations please make sure you have JDK 8 installed and gradle version 5 or above
