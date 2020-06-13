@@ -1,6 +1,7 @@
 package com.mycompany.mytests;
 
 import com.mycompany.myapp.App;
+import io.restassured.http.ContentType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.json.JSONArray;
@@ -8,12 +9,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.skyscreamer.jsonassert.JSONAssert;
 
+import static io.restassured.RestAssured.given;
 import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 import static com.mycompany.variableconfig.VariableConfig.*;
@@ -21,6 +23,24 @@ import static com.mycompany.variableconfig.VariableConfig.*;
 public class APITests {
     OkHttpClient client = new OkHttpClient();
     Request.Builder builder = new Request.Builder();
+
+    @Test
+    public void endpointTestFor() {
+        String urlForLondonCity = String.format(URL_USERS_FOR_CITY_OF, LONDON);
+        String urlForUserId1 = String.format(URL_USER_FOR_ID, 1);
+
+        given().when().get(urlForUserId1)
+                .then().assertThat().statusCode(200)
+                .and().contentType(ContentType.JSON);
+
+        given().when().get(urlForLondonCity)
+                .then().assertThat().statusCode(200)
+                .and().contentType(ContentType.JSON);
+
+        given().when().get(URL_FOR_ALL_USERS)
+                .then().assertThat().statusCode(200)
+                .and().contentType(ContentType.JSON);
+    }
 
     @Test
     public void verifyUser1() throws JSONException {

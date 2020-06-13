@@ -6,7 +6,6 @@ public final class VariableConfig {
     }
 
     public static final int USER_ID = 1;
-    public static final int NUMBER_OF_USERS_PLUS_ONE = 1001;
     public static final int MAX_LONDON_LATITUDE = 52;
     public static final int MIN_LONDON_LATITUDE = 50;
     public static final int MAX_LONDON_LONGITUDE = 2;
@@ -21,5 +20,4 @@ public final class VariableConfig {
     public static final String LATITUDE = "latitude";
     public static final String LONGITUDE = "longitude";
     public static final String ID = "id";
-    public static final String CITY = "city";
 }
