@@ -10,9 +10,11 @@ https://bpdts-test-app.herokuapp.com/, and returns people who are listed as eith
 living in London, or whose current coordinates are within 50 miles (ca. 80 km) of London.
 
 ## How to run the unit tests
+#### For all of the following operations please make sure you have JDK 8 installed and gradle version 5 or above
+
 There are 2 ways to be able to run the test:
 1. Run ./gradlew test in the terminal
-2. Open the APITests in an IDE such as Intellij and click the run button
+2. (Recommended) Open the APITests in an IDE such as Intellij and click the run button
 
 ## How to run the service
 There are 2 ways to be able to run this api:  

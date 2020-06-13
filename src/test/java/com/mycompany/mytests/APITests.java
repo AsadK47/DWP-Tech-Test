@@ -91,9 +91,4 @@ public class APITests {
             }
         }
     }
-
-    @Test
-    public void retrieveAllUsers() {
-        JSONArray allUsers = App.retrieveAllUsers(client, builder);
-    }
 }
