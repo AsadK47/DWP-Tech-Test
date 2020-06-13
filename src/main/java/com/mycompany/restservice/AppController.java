@@ -14,9 +14,9 @@ public class AppController {
     OkHttpClient okHttpClient = new OkHttpClient();
     Request.Builder builder = new Request.Builder();
 
-    @GetMapping("/retrieveUserWithId")
-    public String retrieveWithUserId() {
-        return App.retrieveUserWithId(1, okHttpClient, builder).toString();
+    @GetMapping("/userId/{id}")
+    public String retrieveWithUserId(@PathVariable int id) {
+        return App.retrieveUserWithId(id, okHttpClient, builder).toString();
     }
 
     @GetMapping("/city/{city}")

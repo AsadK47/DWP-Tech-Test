@@ -12,7 +12,6 @@ import java.io.IOException;
 import static com.mycompany.variableconfig.VariableConfig.*;
 
 public class App {
-
     public static void main(String[] args) {
         OkHttpClient client = new OkHttpClient();
         Request.Builder builder = new Request.Builder();
