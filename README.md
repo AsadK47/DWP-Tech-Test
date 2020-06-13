@@ -1,6 +1,6 @@
 # DWP-Tech-Test
 
-## Instructions on the test
+## Instructions for the tech test
 Please complete the online test following the link: https://bpdts-test-app.herokuapp.com
 
 The link contains a swagger spec for an API.
@@ -9,7 +9,7 @@ Using the language of your choice please build your own API which calls the API 
 https://bpdts-test-app.herokuapp.com/, and returns people who are listed as either 
 living in London, or whose current coordinates are within 50 miles (ca. 80 km) of London.
 
-## How to run the tests
+## How to run the unit tests
 There are 2 ways to be able to run the test:
 1. Run ./gradlew test in the terminal
 2. Open the APITests in an IDE such as Intellij and click the run button
@@ -42,11 +42,30 @@ While the instructions were quite clear on what I had to do, I believed this ext
 would add value to the api without ever having to tax the system much harder.
 
 The first being, if localhost is hit without any parameters then it should still return 
-something, rather than nothing. Therefore, I decided to return all of the users in this instance 
-as this shows what data the user is dealing with and makes it easier to consume the api.
+something, rather than nothing because it could potential trick users into thinking that 
+the server was not up because they failed to read the instructions properly. 
+Therefore, I decided to return all of the users in this instance as this shows what 
+data the user is dealing with and makes it easier to consume the api.
 
 The second feature added was the ability to search users by id. The reason for this was because it made it a 
 much easier starting point in both terms of testing the application and developing for it. I left the feature in there 
 because I believe being able to search any user via their id is very useful.
 
+#### Did you follow a TDD approach?
+If you look at my commit history you will see that I tried to follow a TDD approach which was quite successful.
+However, eventually I started to run into unknown territory and had to write the functionality first and tests right after
+to cover the scenario
 
+#### Is your code clean and maintainable?
+I believe it is, however some more improvements could be made with further refactoring and refining. It is at the very least
+quite maintainable in my opinion as I was easily able to add new routes and more functionality and an example of this being
+adding an all users route
+
+#### How could you improve this in the future?
+I would consider changing the code to retrieve all london users within 50 miles as I believe this can be made more
+sophisticated, even though my current solution works. My thinking on how I've implemented it is, finding out 
+London latitude and checking the closest longitudes within reason. Thus, they could only vary between -1 and 1 which is
+the basis for the algorithm used to calculate that.
+
+Latitudes can help you get the vertical axis correct and so has a limited range, but the 
+longitude can vary much more heavily and so finding a rough estimate for London was necessary to start with. 
